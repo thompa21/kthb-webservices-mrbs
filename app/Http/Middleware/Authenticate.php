@@ -58,7 +58,7 @@ class Authenticate
             try {
                 //JWT::$leeway = 60; 
                 //Nyckeln är base64kodad när JWT skapas
-                $secretKey = base64_decode('2232323');
+                $secretKey = base64_decode(env("JWT_SECRET", "missing"));
                 $credentials = JWT::decode($token, $secretKey, ['HS512']);
             } catch(ExpiredException $e) {
                 return response()->json([
