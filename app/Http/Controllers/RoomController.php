@@ -108,10 +108,26 @@ class RoomController extends Controller
         } else {
             return response()->json(['response' => 'Please provide timestamp']);
         }
-        $arr = array();
 
-        $Data = DB::table('mrbs_room')->where('mrbs_room.area_id', '=', '2')->orderBy('sort_key')->get();
+        
+
+        if ($request->has('area_id')) { 
+            $area_id = $request->input('area_id');
+        } else {
+            return response()->json(['response' => 'Please provide area_id']);
+        }
+        $arr = array();
+        $area = DB::table('mrbs_area')
+            ->select('mrbs_area.*')
+            ->where('mrbs_area.id','=', $area_id)
+            ->first();
+        //return $area->morningstarts . ' - ' . date('G',$timestamp);
+        $Data = DB::table('mrbs_room')
+            ->whereIn('mrbs_room.area_id', [$area_id])
+            //->where('mrbs_room.area_id', '=', '2')
+            ->orderBy('sort_key')->get();
         foreach ($Data as $data) {
+            
             $roomwithroomname = DB::table('mrbs_entry')
             ->join('mrbs_room', 'mrbs_entry.room_id', '=', 'mrbs_room.id')
             ->join('mrbs_area', 'mrbs_room.area_id', '=', 'mrbs_area.id')
@@ -119,14 +135,37 @@ class RoomController extends Controller
             ->where('mrbs_room.id', '=', $data->id)
             ->where('mrbs_entry.start_time', '<=', $timestamp)
             ->where('mrbs_entry.end_time', '>', $timestamp)
-            
-            ->count();
-            if ($roomwithroomname == 0){
-                $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'availability' => 'true'];
+            ->first();
+            //om timestamp är utanför öppettider(<$area->morningstarts ELLER >$area->eveningends) för rummen så returnera status unavailable
+            if(date('G',$timestamp) < $area->morningstarts || date('G',$timestamp) > $area->eveningends ){
+                $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'availability' => true, 'status' => 'unavailable'];
             } else {
-                $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'availability' => 'false'];
+                if (!$roomwithroomname){
+                    $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'availability' => true, 'status' => 'free'];
+                } else {
+                    //4=preliminär, 0=kvitterad
+                    if ($roomwithroomname->status == 0 ){
+                        // om type = "C" så returnera status unavailable
+                        if ($roomwithroomname->type == 'C' ){
+                            $status = "unavailable";
+                        } else {
+                            $status = "confirmed";
+                        }
+                        
+                    }
+                    if ($roomwithroomname->status == 4 ){
+                        //om inom 15 minuter före/efter starttiden
+                        //$now = date("Y-m-d H:i:s");
+                        //$nowinseconds = strtotime(date($now));
+                        if ($timestamp < $roomwithroomname->start_time +15*60) {
+                            $status = "tobeconfirmed";
+                        } else {
+                            $status = "tentative";
+                        }
+                    }
+                    $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'availability' => false, 'status' => $status];
+                }
             }
-           
         }
         return response()->json($arr);
     }
