@@ -109,25 +109,28 @@ class RoomController extends Controller
             return response()->json(['response' => 'Please provide timestamp']);
         }
 
-        
-
         if ($request->has('area_id')) { 
             $area_id = $request->input('area_id');
         } else {
             return response()->json(['response' => 'Please provide area_id']);
         }
+
         $arr = array();
+
+        //Hämta area
         $area = DB::table('mrbs_area')
             ->select('mrbs_area.*')
             ->where('mrbs_area.id','=', $area_id)
             ->first();
-        //return $area->morningstarts . ' - ' . date('G',$timestamp);
+
+        //Hämta rum
         $Data = DB::table('mrbs_room')
             ->whereIn('mrbs_room.area_id', [$area_id])
             //->where('mrbs_room.area_id', '=', '2')
             ->orderBy('sort_key')->get();
+
+        //Gå igenom alla rum och kontrollera om status för aktuell timme
         foreach ($Data as $data) {
-            
             $roomwithroomname = DB::table('mrbs_entry')
             ->join('mrbs_room', 'mrbs_entry.room_id', '=', 'mrbs_room.id')
             ->join('mrbs_area', 'mrbs_room.area_id', '=', 'mrbs_area.id')
@@ -136,6 +139,7 @@ class RoomController extends Controller
             ->where('mrbs_entry.start_time', '<=', $timestamp)
             ->where('mrbs_entry.end_time', '>', $timestamp)
             ->first();
+            
             //om timestamp är utanför öppettider(<$area->morningstarts ELLER >$area->eveningends) för rummen så returnera status unavailable
             if(date('G',$timestamp) < $area->morningstarts || date('G',$timestamp) > $area->eveningends ){
                 $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'availability' => true, 'status' => 'unavailable'];
@@ -150,13 +154,10 @@ class RoomController extends Controller
                             $status = "unavailable";
                         } else {
                             $status = "confirmed";
-                        }
-                        
+                        } 
                     }
                     if ($roomwithroomname->status == 4 ){
                         //om inom 15 minuter före/efter starttiden
-                        //$now = date("Y-m-d H:i:s");
-                        //$nowinseconds = strtotime(date($now));
                         if ($timestamp < $roomwithroomname->start_time +15*60) {
                             $status = "tobeconfirmed";
                         } else {
