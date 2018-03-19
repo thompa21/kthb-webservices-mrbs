@@ -11,3 +11,5 @@ https://apps.lib.kth.se/webservices/mrbs/api/v1/entries/4812?api_key={apikey}&la
 
 https://apps.lib.kth.se/webservices/mrbs/api/v1/entries/4812?token={token}&lang=sv
 
+Anonyma anrop för visning på t.ex bibliotekets smartsign-skärmar
+https://apps.lib.kth.se/webservices/mrbs/api/v1/noauth/entries
