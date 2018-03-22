@@ -19,6 +19,10 @@ $router->get('/', function () use ($router) {
 
 $router->group(['prefix' => 'api/v1/'], function ($router) {
     //Sätt alltid statiska routes(entries/search) före dynamiska(entries/{id})
+
+    $router->get('checkjwt','JWTController@index');
+    $router->get('getuserfromtoken','JWTController@getUserFromToken');
+
     $router->get('login/','UserController@authenticate');
     $router->get('entries','EntryController@index');
     $router->get('noauth/entries','EntryController@noauthindex');
@@ -32,6 +36,9 @@ $router->group(['prefix' => 'api/v1/'], function ($router) {
     $router->delete('entries/{id}','EntryController@deleteEntry ');
 
     $router->get('rooms','RoomController@index');
+    $router->get('rooms/{id}','RoomController@getRoom');
     $router->get('noauth/rooms','RoomController@noauthindex');
     $router->get('noauth/roomsavailability','RoomController@noauthgetRoomAvailability');
+
+    $router->get('eventstest','EventController@indextest');
 });

@@ -9,7 +9,9 @@ use Illuminate\Contracts\Auth\Factory as Auth;
 use Firebase\JWT\JWT;
 use Firebase\JWT\ExpiredException;
 use \UnexpectedValueException;
+use \DomainException;
 use Firebase\JWT\SignatureInvalidException;
+
 use Illuminate\Support\Facades\Hash;
 
 class Authenticate
@@ -69,6 +71,10 @@ class Authenticate
                     'error' => 'Signature is invalid.'
                 ], 400);
             } catch(UnexpectedValueException $e) {
+                return response()->json([
+                    'error' => "Invalid token"
+                ], 400);
+            } catch(DomainException $e) {
                 return response()->json([
                     'error' => "Invalid token"
                 ], 400);
