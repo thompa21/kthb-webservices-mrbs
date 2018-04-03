@@ -3,6 +3,7 @@
 return [
     'welcome' => 'Välkommen.',
     'somethingwrong' => 'Någonting gick fel',
+    'confirmcodemissing' => 'Confirmationcode saknas',
     'bookingnotfound' => 'Bokningen hittades inte',
     'roomnotfound' => 'Rummet hittades inte',
     'confirmnotfound' => 'Din bokning hittades inte eller är redan kvitterad',

@@ -38,20 +38,20 @@
                 <div style="float:left;">
                     <div id="logo">
                         <a href="<?php echo trans('messages.kthlink')?>">
-                            <img src="https://apps.lib.kth.se/mrbs/images/KTH_Logotyp_RGB_2013-2.svg" alt="KTH">
+                            <img src="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/images/KTH_Logotyp_RGB_2013-2.svg" alt="KTH">
                         </a>
                     </div>
                 </div>
                 <div id="banner">
                     <div style="float:right;width: 100%;text-align: right;" id="more_info">
                         <ul style="list-style-type: none;margin: 0;padding: 0;font-size: 14px;">
-                            <li style="display: inline-block;"><a href="https://apps.lib.kth.se/mrbssandbox/<?php echo $view?>.php?area=<?php echo $area_id?>"><?php echo trans('messages.home')?></a></li> |
+                            <li style="display: inline-block;"><a href="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/<?php echo $view?>.php?area=<?php echo $area_id?>"><?php echo trans('messages.home')?></a></li> |
                             <li style="display: inline-block;"><a href="<?php echo trans('messages.kthblink')?>"><?php echo trans('messages.kthb')?></a></li> | 
                             <li style="display: inline-block;">
-                                <a style="color: #24A0D8;" href="https://apps.lib.kth.se/mrbssandbox/search.php?advanced=0&datatable=0&search_str=&day=&month=&year=&area=<?php echo $area_id?>&datatable=1"><?php echo trans('messages.mybookings')?></a>
+                                <a style="color: #24A0D8;" href="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/search.php?advanced=0&datatable=0&search_str=&day=&month=&year=&area=<?php echo $area_id?>&datatable=1"><?php echo trans('messages.mybookings')?></a>
                             </li> | 
                             <li style="display: inline-block;">
-                                <a style="color: #24A0D8;" href="https://apps.lib.kth.se/mrbs/help.php"><?php echo trans('messages.help')?></a>
+                                <a style="color: #24A0D8;" href="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/help.php"><?php echo trans('messages.help')?></a>
                             </li>
                         </ul>
                     </div>
@@ -61,7 +61,11 @@
             <div class="header">
                 <span><?php echo trans('messages.confirmheader')?></span>
             </div>
-            <div class="lead"><?php echo trans('messages.confirmmessage_1') . $name . trans('messages.confirmmessage_2') . date('Y-m-d H:i',$start_time) . '-' . date('H:i',$end_time) . trans('messages.confirmmessage_3');?></div>
+            <?php if ($confirmation){ ?>
+                <div class="lead"><?php echo trans('messages.confirmmessage_1') . $name . trans('messages.confirmmessage_2') . date('Y-m-d H:i',$start_time) . '-' . date('H:i',$end_time) . trans('messages.confirmmessage_3');?></div>
+            <?php } else { ?>
+                <div class="lead"><?php echo $message;?></div>
+            <?php } ?>
         </div>
     </body>
 </html>

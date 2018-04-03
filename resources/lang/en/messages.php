@@ -3,6 +3,7 @@
 return [
     'welcome' => 'Welcome to our application',
     'somethingwrong' => 'Something went wrong',
+    'confirmcodemissing' => 'Confirmationcode missing',
     'bookingnotfound' => 'Booking not found',
     'roomnotfound' => 'Room not found',
     'confirmnotfound' => 'Your booking was not found or is already confirmed',

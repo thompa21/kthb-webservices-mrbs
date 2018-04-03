@@ -184,16 +184,18 @@ class EntryController extends Controller
     */
     public function confirm($confirmation_code)
     {
+        $confirmation = false;
+
         if( ! $confirmation_code)
         {
-            return trans('messages.bookingnotfound');
+            return View::make('confirmationmessage', array('message' => trans('messages.confirmcodemissing'), 'confirmation' => $confirmation, 'name' => '', 'start_time' => '', 'end_time' => '', 'area_id' => '', 'view' => 'day'));
         }
 
         $entry = Entry::where('confirmation_code', $confirmation_code)->first();
 
         if ( ! $entry)
         {
-            return trans('messages.confirmnotfound');
+            return View::make('confirmationmessage', array('message' => trans('messages.confirmnotfound'), 'confirmation' => $confirmation, 'name' => '', 'start_time' => '', 'end_time' => '', 'area_id' => '', 'view' => 'day'));
         }
 
         $today = date("Y-m-d H:i:s");
@@ -205,7 +207,7 @@ class EntryController extends Controller
             $entry->confirmation_code = null;
             $entry->save();
         } else {
-            return trans('messages.notinconfirmperiod');
+            return View::make('confirmationmessage', array('message' => trans('messages.notinconfirmperiod'), 'confirmation' => $confirmation, 'name' => '', 'start_time' => '', 'end_time' => '', 'area_id' => '', 'view' => 'day'));
         }
         
         
@@ -223,7 +225,7 @@ class EntryController extends Controller
         } else {
             $view = "week";
         }
-        return View::make('confirmationmessage', array('name' => $entrywithroomname->room_name,'start_time' => $entrywithroomname->start_time, 'end_time' => $entrywithroomname->end_time, 'area_id' => $entrywithroomname->area_id, 'view' => $view));
+        return View::make('confirmationmessage', array('message' => '', 'confirmation' => $confirmation, 'name' => $entrywithroomname->room_name, 'start_time' => $entrywithroomname->start_time, 'end_time' => $entrywithroomname->end_time, 'area_id' => $entrywithroomname->area_id, 'view' => $view));
     }
 
     public function createEntry(Request $request)
