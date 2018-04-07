@@ -28,6 +28,8 @@ $router->group(['prefix' => 'api/v1/'], function ($router) {
     $router->get('rooms/{id}','RoomController@getRoom');
     $router->get('noauth/rooms','RoomController@noauthindex');
     $router->get('noauth/roomsavailability','RoomController@noauthgetRoomAvailability');
+    $router->get('getroombookings','RoomController@getRoomBookings');
+    $router->get('getbookings','RoomController@getBookings');
 
     $router->get('eventstest','EventController@indextest');
 });
