@@ -232,7 +232,15 @@ class EntryController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'create_by' => 'required|email|unique:users'
+            'create_by' => 'required|email',
+            'start_time' => 'required',
+            'end_time' => 'required',
+            'entry_type' => 'required',
+            'room_id' => 'required',
+            'modified_by' => 'required',
+            'type' => 'required',
+            'status' => 'required',
+            'lang' => 'required'
         ]);
 
         $entry = Entry::create($request->all());

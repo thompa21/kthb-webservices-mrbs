@@ -30,7 +30,7 @@ class Entry extends Model implements AuthenticatableContract, AuthorizableContra
      */
     protected $fillable = [
         //lägg till samtliga kolumner
-         'name', 'create_by'
+        'name'
     ];
 
     /**
