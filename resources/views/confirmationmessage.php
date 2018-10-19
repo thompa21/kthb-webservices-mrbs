@@ -1,17 +1,59 @@
 <html>
     <head>
         <style>
+            body {
+                background-color: #e3e5e3;
+                font-family: Arial, 'Arial Unicode MS', Verdana, sans-serif;
+            }
+
+            .page {
+                margin: 0 auto;
+                background: #fff;
+                width: 90.90909091%;
+                max-width: 986px;
+                overflow: auto;
+                padding: 10px 0px;
+            }
+
+            .top {
+                overflow: auto;
+                padding: 0px 10px;
+            }
+
+            .logo {
+                float:left;
+            }
+
+            .menu div {
+                background-color: #fff;
+                color: #000;
+                margin-bottom: 10px;
+                float:right;
+                width: 100%;
+                text-align: right;
+            }
+
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                font-size: 14px;
+            }
+
+            li {
+                display: inline-block;
+            }
+
+            a {
+                color: #24A0D8;
+            }
+
             a:link, a:visited {
                 background-color: #fff;
                 border-color: #a2a2a2;
                 color: #24A0D8;
                 text-decoration: none;
                 font-weight: normal;
-            }
-            #banner div {
-                background-color: #fff;
-                color: #000;
-                margin-bottom: 10px;
             }
 
             .header {
@@ -30,28 +72,34 @@
                 line-height: 23px;
                 color: #333;
             }
+
+            @media (max-width: 599px) and (min-width: 200px) {
+	            .page {
+		            width: 100%;
+	            }
+            }
         </style>
     </head>
-    <body style="background-color: #e3e5e3;font-family: Arial, 'Arial Unicode MS', Verdana, sans-serif;">
-        <div style="margin: 0 auto;background: #fff;width: 90.90909091%;max-width: 986px;overflow: auto;padding: 10px 0px;">
-            <div style="overflow: auto;padding: 0px 10px;">
-                <div style="float:left;">
+    <body>
+        <div class="page">
+            <div class="top">
+                <div class="logo">
                     <div id="logo">
                         <a href="<?php echo trans('messages.kthlink')?>">
                             <img src="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/images/KTH_Logotyp_RGB_2013-2.svg" alt="KTH">
                         </a>
                     </div>
                 </div>
-                <div id="banner">
-                    <div style="float:right;width: 100%;text-align: right;" id="more_info">
-                        <ul style="list-style-type: none;margin: 0;padding: 0;font-size: 14px;">
-                            <li style="display: inline-block;"><a href="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/<?php echo $view?>.php?area=<?php echo $area_id?>"><?php echo trans('messages.home')?></a></li> |
-                            <li style="display: inline-block;"><a href="<?php echo trans('messages.kthblink')?>"><?php echo trans('messages.kthb')?></a></li> | 
-                            <li style="display: inline-block;">
-                                <a style="color: #24A0D8;" href="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/search.php?advanced=0&datatable=0&search_str=&day=&month=&year=&area=<?php echo $area_id?>&datatable=1"><?php echo trans('messages.mybookings')?></a>
+                <div class="menu">
+                    <div id="more_info">
+                        <ul>
+                            <li><a href="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/<?php echo $view?>.php?area=<?php echo $area_id?>"><?php echo trans('messages.home')?></a></li> |
+                            <li><a href="<?php echo trans('messages.kthblink')?>"><?php echo trans('messages.kthb')?></a></li> | 
+                            <li>
+                                <a href="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/search.php?advanced=0&datatable=0&search_str=&day=&month=&year=&area=<?php echo $area_id?>&datatable=1"><?php echo trans('messages.mybookings')?></a>
                             </li> | 
-                            <li style="display: inline-block;">
-                                <a style="color: #24A0D8;" href="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/help.php"><?php echo trans('messages.help')?></a>
+                            <li>
+                                <a href="<?php echo env("MRBS_URL") . env("DB_DATABASE")?>/help.php"><?php echo trans('messages.help')?></a>
                             </li>
                         </ul>
                     </div>

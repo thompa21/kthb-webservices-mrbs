@@ -22,7 +22,7 @@ class RoomController extends Controller
     {
         //definiera vilka anrop som behöver nyckel/autentisering
         $this->middleware('auth', ['only' => [
-            'getRoomBookings', 'index', 'getRoom', 'createRoom', 'updateRoom','deleteRoom', 'search'
+            '', 'index', '', 'createRoom', 'updateRoom','deleteRoom', 'search'
         ]]);
         //Skicka alla anrop till middleware som sätter locale utifrån parameter/header
         $this->middleware('localization');
@@ -310,7 +310,8 @@ class RoomController extends Controller
                         } else {
                             $json .= ",";
                         }
-                        $json .= "{\"hour\": \"" . date('H', $slottime)  . "\", \"status\": \"free\", \"bookingid\": \"\", \"endtime\" : \"" . $row->end_time  ."\"}";
+                        $freendtime = $slottime + $periodresolution;
+                        $json .= "{\"hour\": \"" . date('H', $slottime)  . "\", \"status\": \"free\", \"bookingid\": \"\", \"endtime\" : \"" . $freendtime ."\"}";
                     }
                 }	
             }

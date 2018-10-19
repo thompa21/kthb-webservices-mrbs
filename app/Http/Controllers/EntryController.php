@@ -184,10 +184,11 @@ class EntryController extends Controller
     */
     public function confirm($confirmation_code)
     {
-        $confirmation = false;
+        $confirmation = true;
 
         if( ! $confirmation_code)
         {
+            $confirmation = false;
             return View::make('confirmationmessage', array('message' => trans('messages.confirmcodemissing'), 'confirmation' => $confirmation, 'name' => '', 'start_time' => '', 'end_time' => '', 'area_id' => '', 'view' => 'day'));
         }
 
@@ -195,6 +196,7 @@ class EntryController extends Controller
 
         if ( ! $entry)
         {
+            $confirmation = false;
             return View::make('confirmationmessage', array('message' => trans('messages.confirmnotfound'), 'confirmation' => $confirmation, 'name' => '', 'start_time' => '', 'end_time' => '', 'area_id' => '', 'view' => 'day'));
         }
 
@@ -207,9 +209,9 @@ class EntryController extends Controller
             $entry->confirmation_code = null;
             $entry->save();
         } else {
+            $confirmation = false;
             return View::make('confirmationmessage', array('message' => trans('messages.notinconfirmperiod'), 'confirmation' => $confirmation, 'name' => '', 'start_time' => '', 'end_time' => '', 'area_id' => '', 'view' => 'day'));
         }
-        
         
         $entrywithroomname = DB::table('mrbs_entry')
             ->join('mrbs_room', 'mrbs_entry.room_id', '=', 'mrbs_room.id')
@@ -218,6 +220,8 @@ class EntryController extends Controller
             ->where('mrbs_entry.id', '=', $entry->id)
             ->first();
         
+            //logga alla konfirmeringar, som görs via maillänken, under införandeperiod
+            error_log("Bokning konfirmerad via mrbs api, CONFIRMATION_CODE: " . $confirmation_code . " ENTRY_ID: " . $entry->id);
         //default_view: 0 = day, 1 = week
         $view = "day";
         if ($entrywithroomname->default_view == 0) {
