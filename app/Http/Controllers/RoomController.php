@@ -142,10 +142,10 @@ class RoomController extends Controller
             
             //om timestamp är utanför öppettider(<$area->morningstarts ELLER >$area->eveningends) för rummen så returnera status unavailable
             if(date('G',$timestamp) < $area->morningstarts || date('G',$timestamp) > $area->eveningends ){
-                $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'availability' => true, 'status' => 'unavailable'];
+                $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'disabled' => $data->disabled, 'availability' => true, 'status' => 'unavailable'];
             } else {
                 if (!$roomwithroomname){
-                    $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'availability' => true, 'status' => 'free'];
+                    $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'disabled' => $data->disabled, 'availability' => true, 'status' => 'free'];
                 } else {
                     //4=preliminär, 0=kvitterad
                     if ($roomwithroomname->status == 0 ){
@@ -158,13 +158,14 @@ class RoomController extends Controller
                     }
                     if ($roomwithroomname->status == 4 ){
                         //om inom 15 minuter före/efter starttiden
+                        //if ($timestamp > $roomwithroomname->start_time -15*60 && $timestamp < $roomwithroomname->start_time +15*60) {
                         if ($timestamp < $roomwithroomname->start_time +15*60) {
                             $status = "tobeconfirmed";
                         } else {
                             $status = "tentative";
                         }
                     }
-                    $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'availability' => false, 'status' => $status];
+                    $arr[] = ['room_number' => $data->room_number, 'room_name' => $data->room_name, 'disabled' => $data->disabled, 'availability' => false, 'status' => $status];
                 }
             }
         }

@@ -114,17 +114,17 @@ class EntryController extends Controller
         $query = DB::table('mrbs_entry')
             ->join('mrbs_room', 'mrbs_entry.room_id', '=', 'mrbs_room.id')
             ->join('mrbs_area', 'mrbs_room.area_id', '=', 'mrbs_area.id')
-            ->select('mrbs_entry.*', 'mrbs_room.room_name', 'mrbs_room.area_id', 'mrbs_area.default_view');
+            ->select('mrbs_room.room_name','mrbs_entry.*', 'mrbs_room.area_id', 'mrbs_area.default_view');
         
         if($request->input('fromDate')){
-            $fromDate = $request->input('fromDate');
+            $fromDate = strtotime($request->input('fromDate'));
             $query = $query->when($fromDate, function($q) use ($fromDate) {
                 return $q->where('start_time', '>=', $fromDate);
             });
         }
 
         if($request->input('toDate')){
-            $toDate = $request->input('toDate');
+            $toDate = strtotime($request->input('toDate'));
             $query = $query->when($toDate, function($q) use ($toDate) {
                 return $q->where('end_time', '<=', $toDate);
             });
@@ -142,13 +142,18 @@ class EntryController extends Controller
             }
         }
 
+        //Filtrera bort "stängningsbokningar"
+        //$query = $query->where('type', '!=', 'C');
+        //$query = $query->where('name', 'not like', '%stängt%');
+
         if($request->input('limit')){
             $limit = $request->input('limit');
         } else {
             //visa 50 rader som default
             $limit = 50;
         }
-        
+        $sql = str_replace_array('?',$query->getBindings(), $query->toSql());
+        //return $sql;
         if (is_numeric($limit)){
             return response()->json($query->orderBy('room_name')->orderBy('start_time')->take($limit)->get());
         } else {
