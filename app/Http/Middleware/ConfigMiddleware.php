@@ -6,6 +6,7 @@ class ConfigMiddleware
 {
   /**
   * Handle an incoming request.
+  * Vilken mrbs-app/databas?
   *
   * @param \Illuminate\Http\Request $request
   * @param \Closure $next
