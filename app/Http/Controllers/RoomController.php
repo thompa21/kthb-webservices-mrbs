@@ -26,6 +26,8 @@ class RoomController extends Controller
         ]]);
         //Skicka alla anrop till middleware som sätter locale utifrån parameter/header
         $this->middleware('localization');
+        //Skicka alla till config middleware för att sätta t. ex vilken MRBS databas som ska anropas
+        $this->middleware('config');
     }
 
     /*************************************************

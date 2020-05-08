@@ -72,6 +72,8 @@ $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
      //lagt till språkanpassning
      'localization' => \App\Http\Middleware\localization::class,
+     //ändra config
+     'config' => \App\Http\Middleware\ConfigMiddleware::class,
 ]);
 
 

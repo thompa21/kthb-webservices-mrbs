@@ -12,7 +12,7 @@ $router->group(['prefix' => 'api/v1/'], function ($router) {
     $router->get('checkjwt','JWTController@index');
     $router->get('getuserfromtoken','JWTController@getUserFromToken');
 
-    $router->get('login/','UserController@authenticate');
+    $router->get('indextest','EntryController@indextest');
     $router->get('entries','EntryController@index');
     $router->get('noauth/entries','EntryController@noauthindex');
     $router->get('entries/search','EntryController@search');
@@ -34,6 +34,4 @@ $router->group(['prefix' => 'api/v1/'], function ($router) {
 
     $router->get('areas','AreaController@index');
     $router->get('areas/{id}/rooms','AreaController@getRoomsforArea');
-
-    $router->get('eventstest','EventController@indextest');
 });

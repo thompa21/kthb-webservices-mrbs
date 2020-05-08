@@ -22,12 +22,18 @@ class EntryController extends Controller
     {
         //definiera vilka anrop som behöver nyckel/autentisering
         $this->middleware('auth', ['only' => [
-            'index', 'getEntry', 'createEntry', 'updateEntry','deleteEntry', 'search'
+            'indextest', 'index', 'getEntry', 'createEntry', 'updateEntry','deleteEntry', 'search'
         ]]);
         //Skicka alla anrop till middleware som sätter locale utifrån parameter/header
         $this->middleware('localization');
+        //Skicka alla till config middleware för att sätta t. ex vilken MRBS databas som ska anropas
+        $this->middleware('config');
     }
 
+    public function indextest(Request $request)
+    {
+        return response()->json(config('app'));
+    }
     /*************************************************
      * 
      * Funktion som kan anropas utan några nycklar, 
